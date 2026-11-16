@@ -1,792 +1,543 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>金融推理局｜特别调查档案</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#438BEF">
+<title>知投实验室｜让投资学习更有趣</title>
 <style>
-:root{
-  --bg:#080f1c;--panel:#111e30;--panel2:#17273c;--line:#2a405b;
-  --blue:#55c8ff;--cyan:#72e0df;--gold:#f5c66b;--red:#ff7c83;
-  --green:#7de0b0;--text:#edf5ff;--muted:#9aadc4;
+:root {
+  --blue:#438BEF;
+  --blue-light:#EAF3FF;
+  --orange:#FF795E;
+  --orange-light:#FFF0E9;
+  --purple:#8B6CE8;
+  --purple-light:#F0ECFF;
+  --green:#35B89A;
+  --green-light:#E5F8F2;
+  --navy:#1769AA;
+  --navy-light:#E8F2FF;
+  --bg:#F5F8FC;
+  --white:#FFFFFF;
+  --text:#26364B;
+  --muted:#8290A3;
+  --border:#E9EEF5;
+  --shadow:0 8px 28px rgba(49,85,130,.07);
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-  margin:0;color:var(--text);font-family:Inter,"Microsoft YaHei",Arial,sans-serif;
-  background:
-    radial-gradient(ellipse at 15% 0%,#173354 0,transparent 38%),
-    radial-gradient(ellipse at 100% 60%,#142b3d 0,transparent 34%),var(--bg);
-  min-height:100vh;line-height:1.65;
+  margin:0;
+  font-family:"Microsoft YaHei",Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
 }
-button{font:inherit;cursor:pointer}
-.shell{max-width:1000px;margin:auto;padding:18px 17px 55px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #263950;padding:7px 0 17px}
-.brand{display:flex;align-items:center;gap:11px}
-.logo{
- width:40px;height:40px;border:1px solid #4c83a5;border-radius:12px;
- display:grid;place-items:center;color:var(--cyan);font-size:22px;
- background:linear-gradient(145deg,#183d59,#102338);box-shadow:0 0 22px #43bde522;
+a{text-decoration:none;color:inherit}
+button{font:inherit}
+.layout{
+  max-width:1440px;
+  margin:auto;
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:230px minmax(0,1fr);
 }
-.brandname{font-weight:900;letter-spacing:2px;font-size:17px}
-.brandsub{font-size:10px;color:var(--muted);letter-spacing:2px}
-.topright{text-align:right;color:var(--muted);font-size:11px}
-.live{color:var(--green);font-size:11px}
-.live:before{content:"";display:inline-block;width:6px;height:6px;background:var(--green);border-radius:50%;margin-right:6px;vertical-align:middle;box-shadow:0 0 8px var(--green)}
-.progressbox{display:flex;align-items:center;gap:12px;margin:18px 0 22px}
-.progress{height:5px;flex:1;background:#1d3045;border-radius:10px;overflow:hidden}
-.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:.4s}
-.progresslabel{font-size:11px;color:var(--muted);white-space:nowrap}
-.screen{animation:appear .35s ease}
-@keyframes appear{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.sidebar{
+  background:white;
+  border-right:1px solid var(--border);
+  padding:27px 17px;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:0 9px 32px;
+}
+.brand-icon{
+  width:43px;height:43px;
+  display:grid;place-items:center;
+  border-radius:14px;
+  color:white;font-size:23px;font-weight:bold;
+  background:linear-gradient(135deg,#438BEF,#70B7FF);
+  box-shadow:0 5px 13px #438bef35;
+}
+.brand-name{font-size:18px;font-weight:800}
+.brand-sub{font-size:10px;color:var(--muted);margin-top:3px}
+.nav-title{
+  color:#A5B0BF;font-size:11px;
+  padding:12px 12px 9px;
+  letter-spacing:1px;
+}
+.nav-link{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 13px;
+  border-radius:11px;
+  margin:3px 0;
+  color:#65748A;font-size:13px;
+  transition:.2s;
+}
+.nav-link:hover,.nav-link.active{
+  background:var(--blue-light);
+  color:var(--blue);
+  font-weight:700;
+}
+.nav-icon{font-size:18px;width:22px;text-align:center}
+.sidebar-note{
+  margin-top:auto;
+  padding:16px 13px;
+  background:var(--orange-light);
+  border-radius:13px;
+  color:#A85C49;
+  font-size:11px;
+  line-height:1.8;
+}
+.main{min-width:0;padding:0 34px 40px}
+.topbar{
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.breadcrumb{font-size:13px;color:var(--muted)}
+.breadcrumb strong{color:var(--text)}
+.top-right{display:flex;align-items:center;gap:14px}
+.tag{
+  background:white;border:1px solid var(--border);
+  padding:8px 13px;border-radius:30px;
+  color:#65748A;font-size:12px;
+}
+.avatar{
+  width:35px;height:35px;border-radius:50%;
+  display:grid;place-items:center;
+  color:white;background:var(--orange);
+  font-weight:bold;
+}
+.content{max-width:1100px;margin:27px auto}
 .hero{
- position:relative;overflow:hidden;border:1px solid #34536f;border-radius:22px;
- padding:clamp(23px,5vw,46px);
- background:linear-gradient(125deg,#172f49 0%,#112237 55%,#132b3a 100%);
- box-shadow:0 20px 60px #0005;
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(110deg,#3479E8,#62A9F4);
+  border-radius:21px;
+  padding:39px 42px;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  min-height:250px;
+  box-shadow:0 12px 30px #438bef25;
 }
 .hero:after{
- content:"";position:absolute;width:280px;height:280px;border:1px solid #5bc9e522;
- border-radius:50%;right:-80px;top:-100px;box-shadow:0 0 0 28px #5bc9e20a,0 0 0 58px #5bc9e208;
+  content:"";
+  position:absolute;
+  width:300px;height:300px;
+  border:45px solid #ffffff12;
+  border-radius:50%;
+  right:80px;top:-140px;
 }
-.eyebrow{font-size:11px;letter-spacing:3px;color:var(--cyan);font-weight:800}
-h1{font-size:clamp(30px,6vw,48px);line-height:1.2;margin:14px 0}
-h2{font-size:23px;line-height:1.35;margin:5px 0 12px}
-h3{font-size:16px;margin:0 0 7px}
-p{color:#c1cede;margin:8px 0}
-.muted{color:var(--muted);font-size:13px}
-.panel{
- background:linear-gradient(145deg,#14243a,#101c2d);border:1px solid var(--line);
- border-radius:17px;padding:21px;margin:15px 0;box-shadow:0 12px 30px #0002;
+.hero-text{position:relative;z-index:1;max-width:620px}
+.hero-label{
+  display:inline-block;
+  background:#ffffff25;
+  border:1px solid #ffffff38;
+  border-radius:30px;
+  padding:7px 12px;
+  font-size:11px;
+  letter-spacing:1px;
 }
-.panelhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:13px}
-.tag{font-size:10px;letter-spacing:1px;color:var(--cyan);border:1px solid #37617a;border-radius:30px;padding:4px 9px}
-.notice{padding:13px 15px;background:#173348;border-left:3px solid var(--blue);border-radius:8px;font-size:13px;color:#d7e8f7;margin:15px 0}
-.notice.gold{background:#392f20;border-color:var(--gold)}
-.notice.green{background:#16382f;border-color:var(--green)}
-.notice.red{background:#3a252d;border-color:var(--red)}
-.btn{
- display:inline-flex;justify-content:center;align-items:center;gap:8px;
- padding:12px 19px;border:1px solid #5bbde0;border-radius:10px;
- color:#071927;background:linear-gradient(110deg,#64d3f6,#73e0d9);
- font-weight:800;font-size:14px;transition:.2s;margin:5px 5px 5px 0;
+.hero h1{
+  font-size:34px;line-height:1.4;
+  margin:17px 0 10px;
 }
-.btn:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 7px 22px #4ac5e533}
-.btn.secondary{background:#1b3048;color:#dbeafa;border-color:#405b77}
-.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
-.choice{
- width:100%;display:flex;text-align:left;align-items:flex-start;gap:12px;
- border:1px solid #344b66;background:#172940;color:var(--text);
- border-radius:12px;padding:14px;margin:9px 0;transition:.2s;
+.hero p{
+  font-size:13px;line-height:1.9;
+  color:#EAF4FF;margin:0;
 }
-.choice:hover{border-color:#64bfe0;background:#1b354e}
-.choice.selected{border-color:var(--blue);background:#153d55;box-shadow:inset 0 0 0 1px #55c8ff55}
-.choice .letter{
- flex:0 0 27px;width:27px;height:27px;border-radius:8px;background:#29425b;
- display:grid;place-items:center;color:var(--cyan);font-size:12px;font-weight:bold;
+.hero-btn{
+  display:inline-block;
+  margin-top:23px;
+  background:white;color:#3479E8;
+  padding:12px 21px;border-radius:9px;
+  font-weight:bold;font-size:13px;
+  transition:.2s;
 }
-.choice strong{display:block;font-size:14px}
-.choice small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.clue{
- background:linear-gradient(145deg,#1a2c43,#142236);border:1px solid #344b65;
- border-radius:13px;padding:15px;min-height:140px;display:flex;flex-direction:column;
+.hero-btn:hover{transform:translateY(-2px)}
+.hero-art{
+  position:relative;z-index:1;
+  width:190px;height:165px;
+  display:grid;place-items:center;
+  flex-shrink:0;
 }
-.clue.opened{border-color:#5bb9d8}
-.clue .cluetop{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.clue .stamp{font-size:10px;color:var(--gold);letter-spacing:1px}
-.clue p{font-size:13px}
-.clue button{margin-top:auto;align-self:flex-start}
-.metricgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.metric{
- padding:16px;border:1px solid #344c65;background:#172a40;border-radius:14px;
- cursor:pointer;transition:.2s;min-height:145px;
+.hero-circle{
+  width:135px;height:135px;
+  border-radius:50%;
+  background:#ffffff24;
+  border:1px solid #ffffff50;
+  display:grid;place-items:center;
+  font-size:65px;
+  box-shadow:0 0 0 18px #ffffff0d;
 }
-.metric:hover{transform:translateY(-2px);border-color:#58bce0}
-.metric.viewed{border-color:#65cbbd;background:#173446}
-.metric .value{font-size:25px;font-weight:900;color:var(--cyan);margin:7px 0}
-.metric .unit{font-size:11px;color:var(--muted)}
-.metric .desc{font-size:12px;color:#c1cede;margin-top:9px}
-.counter{font-size:12px;color:var(--muted)}
-.bigquote{font-size:19px;color:#edf7ff;font-weight:700;line-height:1.6}
-.scorecircle{
- width:145px;height:145px;border-radius:50%;display:grid;place-items:center;
- background:radial-gradient(circle at center,#14263a 58%,transparent 60%),conic-gradient(var(--cyan) var(--angle),#2b4056 0);
- margin:15px auto;border:1px solid #395a72;
+.section{margin-top:29px}
+.section-heading{
+  display:flex;align-items:end;
+  justify-content:space-between;
+  margin-bottom:15px;gap:10px;
 }
-.scorecircle strong{font-size:42px;display:block;text-align:center;line-height:1.1}
-.scorecircle span{font-size:11px;color:var(--muted)}
-.scoreitem{padding:13px 0;border-bottom:1px solid #2a3d53}
-.scoretop{display:flex;justify-content:space-between;gap:10px;font-size:13px}
-.track{height:7px;border-radius:8px;background:#2b3e54;margin-top:8px;overflow:hidden}
-.track span{display:block;height:100%;background:linear-gradient(90deg,#4aaedb,#71e0ce);border-radius:8px}
-.resultcard{border:1px solid #3c6177;background:linear-gradient(135deg,#17374b,#17283e);padding:19px;border-radius:15px;margin:14px 0}
-.resultcard h3{color:var(--cyan)}
-.resulttitle{font-size:25px;font-weight:900;color:#f0f8ff}
-.resultsection{margin:17px 0}
-.resultsection h3{color:var(--gold);font-size:14px}
-.resultsection p{font-size:13px}
-hr{border:0;border-top:1px solid #2b4057;margin:19px 0}
-.hidden{display:none!important}
-.footer{text-align:center;color:#71859d;font-size:11px;margin-top:25px}
-@media(max-width:620px){
- .grid,.metricgrid{grid-template-columns:1fr}
- .topright{font-size:10px}
- .panel{padding:16px}
- .hero{padding:25px 20px}
+.section-heading h2{font-size:18px;margin:0 0 5px}
+.section-heading p{font-size:11px;color:var(--muted);margin:0}
+.more{font-size:11px;color:var(--blue)}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.stat{
+  background:white;border:1px solid var(--border);
+  border-radius:14px;padding:17px 19px;
+}
+.stat-label{font-size:11px;color:var(--muted)}
+.stat-value{font-size:23px;font-weight:800;margin:8px 0 4px}
+.stat-foot{font-size:10px;color:#A0AABA}
+.stat-blue{color:var(--blue)}
+.stat-orange{color:var(--orange)}
+.stat-green{color:var(--green)}
+.modules{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+.module{
+  position:relative;
+  display:flex;
+  gap:15px;
+  align-items:flex-start;
+  padding:21px;
+  min-height:150px;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:15px;
+  transition:.2s;
+}
+.module.available:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow);
+}
+.module-icon{
+  flex-shrink:0;
+  width:49px;height:49px;
+  border-radius:14px;
+  display:grid;place-items:center;
+  font-size:23px;
+}
+.module h3{font-size:15px;margin:2px 0 8px}
+.module p{
+  font-size:11px;line-height:1.8;
+  color:var(--muted);margin:0 0 13px;
+}
+.module-action{font-size:11px;font-weight:bold}
+.purple .module-icon{background:var(--purple-light)}
+.purple .module-action{color:var(--purple)}
+.green .module-icon{background:var(--green-light)}
+.green .module-action{color:var(--green)}
+.orange .module-icon{background:var(--orange-light)}
+.orange .module-action{color:var(--orange)}
+.navy .module-icon{background:var(--navy-light)}
+.navy .module-action{color:var(--navy)}
+.coming{
+  position:absolute;right:13px;top:13px;
+  background:#F0F2F5;color:#9AA5B3;
+  font-size:9px;padding:5px 8px;border-radius:20px;
+}
+.path{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:11px;
+}
+.path-item{
+  background:white;border:1px solid var(--border);
+  padding:15px;border-radius:13px;
+}
+.path-number{
+  font-size:10px;font-weight:bold;color:var(--blue);
+}
+.path-item h4{font-size:12px;margin:9px 0 5px}
+.path-item p{
+  font-size:10px;color:var(--muted);
+  line-height:1.7;margin:0;
+}
+.ai-banner{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:15px;
+  background:linear-gradient(100deg,#F0ECFF,#EAF3FF);
+  border:1px solid #E7E2FC;
+  border-radius:15px;padding:19px 22px;
+}
+.ai-title{font-size:14px;font-weight:bold;color:#6252B4}
+.ai-desc{font-size:11px;color:#7B7A9C;margin-top:6px;line-height:1.7}
+.ai-button{
+  white-space:nowrap;
+  padding:10px 15px;border-radius:9px;
+  background:#7466D9;color:white;
+  font-size:11px;font-weight:bold;
+}
+.disclaimer{
+  margin-top:25px;padding:14px 16px;
+  border-radius:10px;background:#FFF9F4;
+  color:#9B806F;font-size:10px;line-height:1.8;
+}
+footer{
+  border-top:1px solid var(--border);
+  margin-top:28px;padding-top:17px;
+  display:flex;justify-content:space-between;
+  color:#A1ACBA;font-size:10px;
+}
+.mobile-nav{display:none}
+@media(max-width:900px){
+  .layout{grid-template-columns:190px minmax(0,1fr)}
+  .main{padding:0 20px 30px}
+  .hero{padding:30px}
+  .hero-art{width:140px}
+}
+@media(max-width:650px){
+  .layout{display:block;padding-bottom:65px}
+  .sidebar{display:none}
+  .main{padding:0 15px 25px}
+  .topbar{height:60px}
+  .tag{display:none}
+  .content{margin:17px auto}
+  .hero{padding:25px 21px;min-height:220px}
+  .hero h1{font-size:25px}
+  .hero p{font-size:11px}
+  .hero-art{width:85px;height:100px}
+  .hero-circle{width:75px;height:75px;font-size:36px}
+  .stats{gap:8px}
+  .stat{padding:12px 10px}
+  .stat-value{font-size:18px}
+  .stat-label{font-size:10px}
+  .stat-foot{font-size:9px}
+  .modules{grid-template-columns:1fr;gap:10px}
+  .module{min-height:125px;padding:16px}
+  .path{grid-template-columns:repeat(2,1fr)}
+  .ai-banner{padding:16px}
+  .ai-button{font-size:10px;padding:9px}
+  footer{display:block;line-height:2}
+  .mobile-nav{
+    position:fixed;bottom:0;left:0;right:0;
+    z-index:10;background:#ffffffed;
+    backdrop-filter:blur(12px);
+    border-top:1px solid var(--border);
+    display:flex;justify-content:space-around;
+    padding:9px 3px 8px;
+  }
+  .mobile-nav a{
+    display:flex;flex-direction:column;
+    align-items:center;gap:3px;
+    font-size:9px;color:#8290A3;
+  }
+  .mobile-nav a:first-child{color:var(--blue)}
+  .mobile-nav span{font-size:19px}
 }
 </style>
 </head>
 <body>
-<div class="shell">
-<header class="topbar">
- <div class="brand">
-  <div class="logo">⌕</div>
-  <div><div class="brandname">金融推理局</div><div class="brandsub">FINANCIAL INTELLIGENCE BUREAU</div></div>
- </div>
- <div class="topright"><div class="live">调查系统运行中</div><div>CASE FILE · HX-027</div></div>
-</header>
-<div class="progressbox">
- <div class="progress"><div id="progress"></div></div>
- <div class="progresslabel" id="progressLabel">任务准备中</div>
+<div class="layout">
+
+<aside class="sidebar">
+  <a class="brand" href="index.html">
+    <div class="brand-icon">知</div>
+    <div>
+      <div class="brand-name">知投实验室</div>
+      <div class="brand-sub">SMART INVESTMENT LEARNING</div>
+    </div>
+  </a>
+
+  <div class="nav-title">学习中心</div>
+  <a class="nav-link active" href="#home"><span class="nav-icon">⌂</span>首页</a>
+  <a class="nav-link" href="#modules"><span class="nav-icon">▦</span>学习模块</a>
+  <a class="nav-link" href="#path"><span class="nav-icon">◷</span>学习路径</a>
+
+  <div class="nav-title">探索工具</div>
+  <a class="nav-link" href="investment-style-test.html"><span class="nav-icon">◈</span>决策风格测试</a>
+  <a class="nav-link" href="financial-reasoning.html"><span class="nav-icon">⌕</span>金融推理局</a>
+  <a class="nav-link" href="#modules"><span class="nav-icon">▥</span>模拟投资实验室</a>
+
+  <div class="nav-title">更多</div>
+  <a class="nav-link" href="#ai"><span class="nav-icon">✧</span>AI智能投教</a>
+  <a class="nav-link" href="#about"><span class="nav-icon">ⓘ</span>关于平台</a>
+
+  <div class="sidebar-note">
+    <strong>理性投资，从学习开始。</strong><br>
+    先理解信息，再形成判断。让每一次决策都有依据。
+  </div>
+</aside>
+
+<main class="main" id="home">
+  <div class="topbar">
+    <div class="breadcrumb">学习中心　/　<strong>平台首页</strong></div>
+    <div class="top-right">
+      <span class="tag">大学生智能化投资学习平台</span>
+      <div class="avatar">知</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <section class="hero">
+      <div class="hero-text">
+        <span class="hero-label">WELCOME TO ZHITOU LAB</span>
+        <h1>投资可以不盲目，<br>学习可以更有趣。</h1>
+        <p>从认识自己的决策倾向，到学习金融知识、训练风险判断，<br>在探索与实践中建立理性投资思维。</p>
+        <a class="hero-btn" href="#modules">开始探索　→</a>
+      </div>
+      <div class="hero-art">
+        <div class="hero-circle">💡</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div>
+          <h2>学习中心</h2>
+          <p>从基础认知出发，逐步建立自己的投资判断能力。</p>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-label">学习模块</div>
+          <div class="stat-value stat-blue">04</div>
+          <div class="stat-foot">从认知到实践</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">核心理念</div>
+          <div class="stat-value stat-orange">理性</div>
+          <div class="stat-foot">独立判断，重视风险</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">学习方式</div>
+          <div class="stat-value stat-green">互动</div>
+          <div class="stat-foot">测试、案例与模拟</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="modules">
+      <div class="section-heading">
+        <div>
+          <h2>探索学习模块</h2>
+          <p>选择一个感兴趣的模块，开启你的学习旅程。</p>
+        </div>
+        <a class="more" href="#path">查看学习路径 →</a>
+      </div>
+
+      <div class="modules">
+        <a class="module available purple" href="investment-style-test.html">
+          <div class="module-icon">🧭</div>
+          <div>
+            <h3>投资决策风格测试</h3>
+            <p>通过18道情境题，了解自己的信息处理与决策倾向，生成个人风格画像。</p>
+            <span class="module-action">进入测试　→</span>
+          </div>
+        </a>
+
+        <a class="module available orange" href="financial-reasoning.html">
+          <div class="module-icon">🔎</div>
+          <div>
+            <h3>金融推理局</h3>
+            <p>进入商业调查情境，审查线索、分析经营数据、核查信息，训练独立判断能力。</p>
+            <span class="module-action">进入案件　→</span>
+          </div>
+        </a>
+
+        <div class="module navy">
+          <span class="coming">筹备中</span>
+          <div class="module-icon">📈</div>
+          <div>
+            <h3>模拟投资实验室</h3>
+            <p>在虚拟市场中体验资产配置、信息判断与风险管理，观察自己的决策过程。</p>
+            <span class="module-action">即将开放</span>
+          </div>
+        </div>
+
+        <div class="module green">
+          <span class="coming">筹备中</span>
+          <div class="module-icon">📚</div>
+          <div>
+            <h3>金融课堂</h3>
+            <p>循序学习金融基础概念、企业经营指标、投资风险与信息识别方法。</p>
+            <span class="module-action">即将开放</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="path">
+      <div class="section-heading">
+        <div>
+          <h2>你的学习路径</h2>
+          <p>从认识自己开始，逐步走向理性判断。</p>
+        </div>
+      </div>
+      <div class="path">
+        <div class="path-item">
+          <div class="path-number">STEP 01</div>
+          <h4>认识自己</h4>
+          <p>了解个人决策倾向，建立自我认知。</p>
+        </div>
+        <div class="path-item">
+          <div class="path-number">STEP 02</div>
+          <h4>学习知识</h4>
+          <p>理解基础概念，提升金融信息素养。</p>
+        </div>
+        <div class="path-item">
+          <div class="path-number">STEP 03</div>
+          <h4>训练判断</h4>
+          <p>通过案例分析，练习证据核查与风险识别。</p>
+        </div>
+        <div class="path-item">
+          <div class="path-number">STEP 04</div>
+          <h4>模拟实践</h4>
+          <p>在虚拟情境中复盘决策过程与风险控制。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ai">
+      <div class="ai-banner">
+        <div>
+          <div class="ai-title">✦ AI 智能投教</div>
+          <div class="ai-desc">遇到不懂的金融概念？让AI辅助解释，再自己核查信息与依据。<br>不盲目采纳答案，培养独立思考能力。</div>
+        </div>
+        <span class="ai-button">即将开放</span>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-heading">
+        <div>
+          <h2>关于知投实验室</h2>
+          <p>让投资教育更易理解，让理性判断成为一种习惯。</p>
+        </div>
+      </div>
+      <div class="disclaimer">
+        知投实验室是面向大学生的投资学习与风险教育平台。平台内容用于教育与研究，不构成个性化投资建议。模拟活动使用虚拟资金，不涉及真实证券交易。投资有风险，参与前应充分了解相关风险。
+      </div>
+    </section>
+
+    <footer>
+      <span>© 知投实验室 · 大学生智能化投资学习与风险教育平台</span>
+      <span>理性认知 · 独立判断 · 风险意识</span>
+    </footer>
+  </div>
+</main>
 </div>
-<main id="app" class="screen"></main>
-<div class="footer">模拟企业与情境均为虚构内容｜本实验仅用于投资教育研究，不构成投资建议</div>
-</div>
 
-<script>
-const app=document.getElementById("app");
-const progressEl=document.getElementById("progress");
-
-const progressLabel=document.getElementById("progressLabel");
-
-// ===== Supabase 云端连接配置 =====
-// 请将下面两项替换为你自己的 Supabase 项目地址和 Legacy anon public key。
-// 只能使用 anon public key，绝对不要填写 service_role / secret key。
-const SUPABASE_URL = "https://izofdngfczaxlqmnmfal.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6b2ZkbmdmY3pheGxxbW5tZmFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMwNzc1NTMsImV4cCI6MjEwODY1MzU1M30.yWtR8ryfAHiZPyOXiKg9PGt9KRhJAyZx2x266MQ1BLc";
-
-let cloudUploading = false;
-
-function cloudConfigured(){
- return SUPABASE_URL.startsWith("https://") &&
-        !SUPABASE_URL.includes("在这里填写") &&
-        SUPABASE_ANON_KEY.length > 30 &&
-        !SUPABASE_ANON_KEY.includes("在这里填写");
-}
-
-async function syncToCloud(){
- const status=document.getElementById("cloudStatus");
- const retry=document.getElementById("retryUpload");
- if(!status) return;
-
- if(!cloudConfigured()){
-  status.textContent="本机记录已保存｜等待配置 Supabase 地址和 anon 公钥";
-  status.className="notice gold";
-  if(retry) retry.classList.remove("hidden");
-  return;
- }
- if(cloudUploading) return;
- if(S.cloud_sync==="success"){
-  status.textContent="云端同步成功｜实验记录已进入研究后台";
-  status.className="notice green";
-  if(retry) retry.classList.add("hidden");
-  return;
- }
-
- cloudUploading=true;
- status.textContent="正在安全提交实验记录……";
- status.className="notice";
- if(retry) retry.disabled=true;
-
- try{
-  const payload={
-   session_id:S.id,
-   answers:{
-    ...S.answers,
-    _raw_scores:S.scores,
-    _events:S.events,
-    _interpretation:S.interpretation,
-    _result_profile:S.result_profile
-   },
-   total_score:S.total,
-   dimension_scores:S.dimension_scores || {},
-   completed_at:S.ended || new Date().toISOString(),
-   duration_seconds:S.duration_seconds
-  };
-
-  const response=await fetch(
-   SUPABASE_URL.replace(/\/$/,"")+"/functions/v1/save-financial-reasoning",
-   {
-    method:"POST",
-    headers:{
-     "Content-Type":"application/json",
-     "apikey":SUPABASE_ANON_KEY,
-     "Authorization":"Bearer "+SUPABASE_ANON_KEY
-    },
-    body:JSON.stringify(payload)
-   }
-  );
-
-  const result=await response.json().catch(()=>({}));
-  if(!response.ok || result.success!==true){
-   throw new Error(result.message || ("HTTP "+response.status));
-  }
-
-  S.cloud_sync="success";
-  S.cloud_record_id=result.record_id;
-  S.cloud_synced_at=new Date().toISOString();
-  localStorage.setItem("FI_CASE_"+S.id,JSON.stringify(S));
-  status.textContent="云端同步成功｜实验记录已进入研究后台（记录编号："+result.record_id+"）";
-  status.className="notice green";
-  if(retry) retry.classList.add("hidden");
- }catch(error){
-  S.cloud_sync="failed";
-  S.cloud_error=String(error.message || error);
-  localStorage.setItem("FI_CASE_"+S.id,JSON.stringify(S));
-  status.textContent="云端同步失败｜本机记录仍已保存。请检查网络或配置后点击重试。";
-  status.className="notice red";
-  if(retry){
-   retry.disabled=false;
-   retry.classList.remove("hidden");
-  }
-  console.error("金融推理局云端同步失败：",error);
- }finally{
-  cloudUploading=false;
- }
-}
-
-const S={
- id:"HX"+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,6).toUpperCase(),
- started:new Date().toISOString(),
- ended:null,
- duration_seconds:0,
- answers:{},
- scores:{},
- events:[],
- total:0
-};
-function event(type,value){
- S.events.push({type,value,time:new Date().toISOString()});
-}
-function bar(n,label){
- progressEl.style.width=n+"%";
- progressLabel.textContent=label;
-}
-function page(html){
- app.innerHTML=html;
- app.classList.remove("screen");
- void app.offsetWidth;
- app.classList.add("screen");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function btn(id,fn){
- const el=document.getElementById(id);
- if(el)el.onclick=fn;
-}
-function single(id,callback){
- const box=document.getElementById(id);
- box.querySelectorAll(".choice").forEach(el=>{
-  el.onclick=()=>{
-   box.querySelectorAll(".choice").forEach(x=>x.classList.remove("selected"));
-   el.classList.add("selected");
-   callback(el.dataset.v);
-  };
- });
-}
-function multi(id,max,callback){
- const box=document.getElementById(id);
- let chosen=[];
- box.querySelectorAll(".choice").forEach(el=>{
-  el.onclick=()=>{
-   const v=el.dataset.v;
-   if(chosen.includes(v))chosen=chosen.filter(x=>x!==v);
-   else if(chosen.length<max)chosen.push(v);
-   el.classList.toggle("selected",chosen.includes(v));
-   callback([...chosen]);
-  };
- });
-}
-function options(items){
- return items.map((x,i)=>`
- <button class="choice" data-v="${x.v}">
-  <span class="letter">${String.fromCharCode(65+i)}</span>
-  <span><strong>${x.t}</strong>${x.d?`<small>${x.d}</small>`:""}</span>
- </button>`).join("");
-}
-function start(){
- bar(2,"案件载入");
- page(`
- <section class="hero">
-  <div class="eyebrow">SPECIAL INVESTIGATION · 027</div>
-  <h1>一份看似漂亮的<br>企业成绩单</h1>
-  <p>一家正在扩张的科技企业，收入增长、订单增加，市场情绪高涨。但几份内部材料，却透露出不太一样的信号。</p>
-  <div class="notice">你的任务不是猜涨跌，而是像调查员一样：识别信息、追踪证据、判断风险，并在新证据出现时重新思考。</div>
-  <button class="btn" id="start">接受调查任务　→</button>
- </section>
- <div class="panel">
-  <div class="panelhead"><h3>案件资料</h3><span class="tag">虚构案例</span></div>
-  <div class="grid">
-   <div><div class="muted">调查对象</div><b>HX科技</b></div>
-   <div><div class="muted">案件类型</div><b>经营质量核查</b></div>
-   <div><div class="muted">预计用时</div><b>6—10分钟</b></div>
-   <div><div class="muted">调查模式</div><b>独立判断</b></div>
-  </div>
-  <p class="muted">全程无需注册或填写个人身份信息。你的操作将保存在当前浏览器，可在结束后导出。</p>
- </div>`);
- btn("start",pretest);
-}
-function pretest(){
- bar(8,"初始判断");
- page(`
- <div class="panel">
-  <div class="eyebrow">STAGE 00 / FIRST IMPRESSION</div>
-  <h2>调查开始前：先记录你的直觉</h2>
-  <p>你刚收到一条简短的市场消息：</p>
-  <div class="resultcard">
-   <span class="tag">市场快讯</span>
-   <div class="bigquote">“HX科技今年新业务订单增长明显，市场关注度持续上升。”</div>
-   <p class="muted">目前没有其他财务资料或项目进度信息。</p>
-  </div>
-  <h3>仅根据这条消息，你目前对企业的初步态度是？</h3>
-  <div id="initial">${options([
-   {v:"positive",t:"偏积极",d:"愿意进一步了解，初步看好"},
-   {v:"neutral",t:"暂时观望",d:"信息太少，暂时不形成倾向"},
-   {v:"negative",t:"偏谨慎",d:"对市场热度和订单增长保持警惕"}
-  ])}</div>
-  <hr>
-  <h3>你对这个初步判断有多大把握？</h3>
-  <div id="confidence">${options([
-   {v:"1",t:"很低",d:"目前几乎没有判断依据"},
-   {v:"2",t:"较低"},{v:"3",t:"一般"},{v:"4",t:"较高"},{v:"5",t:"很高",d:"我认为这条消息已经足够说明问题"}
-  ])}</div>
-  <button class="btn" id="next" disabled>锁定初始判断</button>
- </div>`);
- let a="",c="";
- single("initial",v=>{a=v;check()});
- single("confidence",v=>{c=v;check()});
- function check(){document.getElementById("next").disabled=!(a&&c)}
- btn("next",()=>{
-  S.answers.initial={judgment:a,confidence:Number(c)};
-  event("initial_judgment",S.answers.initial);
-  cluesStage();
- });
-}
-const clues=[
- {id:"official",name:"企业公告",source:"企业官方披露",time:"昨天 18:30",body:"HX科技披露：新业务订单金额同比增长约40%，目前已签署部分框架协议。公告同时说明，部分订单仍需根据客户实际需求分批交付。",kind:"事实中含有条件",hint:"公告来自企业官方渠道，但框架协议与已完成交付并不是一回事。"},
- {id:"media",name:"财经自媒体",source:"财经观察账号",time:"今天 08:15",body:"作者引用订单增长数据，认为HX科技有望迎来业绩拐点，并提到公司近期获得多家机构关注。文章没有展示完整的盈利预测依据。",kind:"数据与观点混合",hint:"引用真实数据不代表后续预测也已经得到证明。"},
- {id:"chat",name:"投资群截图",source:"匿名群聊转发",time:"今天 09:02",body:"截图称：某客户可能推迟验收，项目交付存在变数。截图没有客户名称，也没有原始文件。",kind:"未核实线索",hint:"匿名信息不能直接作为事实，但也可以成为进一步核查的线索。"},
- {id:"ai",name:"AI分析摘要",source:"智能分析工具",time:"今天 09:20",body:"AI总结称企业盈利能力持续改善，并引用了一组两年前的毛利率数据。摘要没有注明数据更新时间，也没有附上原始链接。",kind:"辅助分析材料",hint:"AI可能整理了真实材料，但数据过期会让结论失去时效性。"}
-];
-let opened=[];
-let clueClass={};
-function cluesStage(){
- bar(19,"第一关 · 信息审查");
- opened=[];clueClass={};
- clueScreen();
-}
-function clueScreen(){
- page(`
- <div class="panel">
-  <div class="eyebrow">STAGE 01 / SOURCE INTELLIGENCE</div>
-  <div class="panelhead"><h2>线索审查室</h2><span class="tag">01 / 04</span></div>
-  <p>调查桌上有四份材料。它们并非简单的“真”或“假”——有些包含真实数据，有些夹杂推测，还有些可能值得核查。</p>
-  <div class="grid" id="clueGrid"></div>
-  <div class="notice">点击材料查看详情。读完后，你需要决定优先核查哪一条线索。</div>
-  <div class="muted">已查看 <b id="openedCount">0</b> / 4 份材料</div>
-  <button class="btn" id="next" disabled>进入线索判断 →</button>
- </div>`);
- const grid=document.getElementById("clueGrid");
- clues.forEach(c=>{
-  const el=document.createElement("div");
-  el.className="clue";
-  el.innerHTML=`
-   <div class="cluetop"><span class="stamp">EVIDENCE ${c.id.toUpperCase()}</span><span class="tag">${c.source}</span></div>
-   <h3>${c.name}</h3><p class="muted">${c.time}</p>
-   <button class="btn secondary">打开档案</button>
-   <div class="hidden detail"><hr><p>${c.body}</p><p class="muted">材料性质：${c.kind}</p><p class="muted">调查提示：${c.hint}</p></div>`;
-  el.querySelector("button").onclick=()=>{
-   el.querySelector(".detail").classList.toggle("hidden");
-   el.classList.add("opened");
-   if(!opened.includes(c.id)){
-    opened.push(c.id);event("clue_opened",c.id);
-    document.getElementById("openedCount").textContent=opened.length;
-   }
-   document.getElementById("next").disabled=opened.length<2;
-  };
-  grid.appendChild(el);
- });
- btn("next",sourceStage);
-}
-function sourceStage(){
- bar(27,"第一关 · 线索判断");
- page(`
- <div class="panel">
-  <div class="eyebrow">SOURCE PRIORITY</div>
-  <h2>如果只能先核查一件事</h2>
-  <p>目前你已经看过材料。调查时间有限，你会优先采取哪一步？</p>
-  <div id="source">${options([
-   {v:"announcement",t:"核对框架协议的具体内容",d:"确认订单是否具有约束力、交付条件是什么"},
-   {v:"customer",t:"寻找客户验收或交付的原始信息",d:"尝试核实匿名截图所说的项目变数"},
-   {v:"media",t:"进一步研究机构关注和市场预期",d:"了解市场为何看好这家企业"},
-   {v:"ai",t:"让AI重新生成一份更完整的报告",d:"希望通过更多分析补足现有材料"}
-  ])}</div>
-  <button class="btn" id="next" disabled>提交调查优先级</button>
- </div>`);
- let v="";
- single("source",x=>{v=x;document.getElementById("next").disabled=false});
- btn("next",()=>{
-  S.answers.source_priority=v;event("source_priority",v);
-  S.scores.information=sourceScore(v);
-  metricStage();
- });
-}
-function sourceScore(v){
- return {announcement:25,customer:23,media:12,ai:8}[v];
-}
-const metrics=[
- {id:"revenue",name:"营业收入",old:"80亿元",now:"100亿元",change:"+25%",desc:"企业通过日常经营活动取得的收入。增长可能意味着业务规模扩大，但收入不等于已经收到现金。"},
- {id:"profit",name:"净利润",old:"8亿元",now:"9亿元",change:"+12.5%",desc:"扣除成本、费用及相关税费后形成的利润。利润增长是积极信号，但不代表现金已经回笼。"},
- {id:"cash",name:"经营活动现金流净额",old:"6亿元",now:"4亿元",change:"-33.3%",desc:"企业日常经营活动带来的现金净流入。下降可能与回款周期、备货或经营压力有关，需要结合应收账款等信息判断。"},
- {id:"margin",name:"毛利率",old:"35%",now:"32%",change:"-3个百分点",desc:"毛利占营业收入的比例。下降可能与原材料成本、产品结构或价格竞争有关。"},
- {id:"receivable",name:"应收账款",old:"12亿元",now:"20亿元",change:"+66.7%",desc:"客户尚未支付给企业的款项。增长可能伴随业务扩张，也可能意味着回款速度放慢。"}
-];
-let viewedMetrics=[];
-function metricStage(){
- bar(39,"第二关 · 财务调查");
- viewedMetrics=[];
- page(`
- <div class="panel">
-  <div class="eyebrow">STAGE 02 / FINANCIAL FORENSICS</div>
-  <div class="panelhead"><h2>企业调查室</h2><span class="tag">02 / 04</span></div>
-  <p>HX科技公布了两期经营数据。数据看起来并不完全一致：收入和利润增长，但另外几项指标也出现变化。</p>
-  <div class="notice gold">调查提示：不要看到下降就直接认定风险，也不要看到增长就忽略异常。先点开数据，理解每项指标代表什么。</div>
-  <div class="metricgrid" id="metricGrid"></div>
-  <p class="counter">已解锁 <b id="metricCount">0</b> / 5 项数据</p>
-  <button class="btn" id="next" disabled>整理证据 →</button>
- </div>`);
- const grid=document.getElementById("metricGrid");
- metrics.forEach(m=>{
-  const el=document.createElement("div");
-  el.className="metric";
-  el.innerHTML=`
-   <div class="muted">${m.name}</div>
-   <div class="value">${m.change}</div>
-   <div class="unit">${m.old}　→　${m.now}</div>
-   <div class="desc hidden">${m.desc}</div>
-   <button class="btn secondary">查看指标解释</button>`;
-  el.onclick=()=>{
-   el.querySelector(".desc").classList.toggle("hidden");
-   el.classList.add("viewed");
-   if(!viewedMetrics.includes(m.id)){
-    viewedMetrics.push(m.id);event("metric_viewed",m.id);
-    document.getElementById("metricCount").textContent=viewedMetrics.length;
-   }
-   document.getElementById("next").disabled=viewedMetrics.length<3;
-  };
-  grid.appendChild(el);
- });
- btn("next",riskStage);
-}
-function riskStage(){
- bar(49,"第二关 · 证据组合");
- page(`
- <div class="panel">
-  <div class="eyebrow">EVIDENCE COMBINATION</div>
-  <h2>你认为最值得继续调查的两组信号？</h2>
-  <p>企业收入增长、利润增长，但现金流下降、应收账款增加、毛利率下降。请选择两项你认为最有必要进一步追查的指标。</p>
-  <div class="notice">注意：这里没有哪一项指标单独就能证明企业经营恶化。你要选择的是“最值得继续调查”的线索。</div>
-  <p class="counter">已选择 <b id="riskCount">0</b> / 2</p>
-  <div id="risk">${options([
-   {v:"revenue",t:"营业收入增长25%",d:"业务规模扩大，可能是积极信号"},
-   {v:"profit",t:"净利润增长12.5%",d:"盈利增加，但仍需了解现金回笼情况"},
-   {v:"cash",t:"经营现金流下降33.3%",d:"经营带来的现金净流入减少"},
-   {v:"margin",t:"毛利率下降3个百分点",d:"单位收入中留存的毛利比例下降"},
-   {v:"receivable",t:"应收账款增长66.7%",d:"客户尚未支付的款项明显增加"}
-  ])}</div>
-  <button class="btn" id="next" disabled>提交调查重点</button>
- </div>`);
- let selected=[];
- multi("risk",2,v=>{
-  selected=v;document.getElementById("riskCount").textContent=v.length;
-  document.getElementById("next").disabled=v.length!==2;
- });
- btn("next",()=>{
-  S.answers.metrics_viewed=viewedMetrics;
-  S.answers.risk_indicators=selected;
-  // 现金流、应收账款、毛利率为重点追查项；收入和利润也可能有分析价值，但优先级较低
-  const weights={cash:15,receivable:15,margin:12,revenue:4,profit:4};
-  S.scores.financial=selected.reduce((sum,x)=>sum+weights[x],0);
-  event("risk_indicators",selected);
-  surpriseStage();
- });
-}
-function surpriseStage(){
- bar(65,"第三关 · 动态决策");
- page(`
- <div class="panel">
-  <div class="eyebrow">STAGE 03 / NEW EVIDENCE</div>
-  <h2>突发情况：新的项目进展</h2>
-  <p>就在你准备提交报告时，企业发布了补充说明。</p>
-  <div class="resultcard">
-   <div class="panelhead"><h3>项目进展更新</h3><span class="tag">刚刚收到</span></div>
-   <p>部分设备已到达现场，项目团队称整体进度符合当前计划。但核心设备仍处于测试阶段，最终交付时间需要根据测试结果确认。</p>
-   <hr>
-   <p>同时，企业解释称，应收账款增加与新业务扩张有关，部分客户采用分阶段结算方式。</p>
-  </div>
-  <p>这条消息既提供了积极信息，也没有完全消除之前的疑问。</p>
-  <h3>你现在会怎么调整调查方案？</h3>
-  <div id="action">${options([
-   {v:"verify",t:"继续核实",d:"要求查看客户验收、回款安排和设备测试进度"},
-   {v:"cautious",t:"暂时保持谨慎",d:"等待下一期数据和更完整的项目披露"},
-   {v:"update",t:"适度调整判断",d:"承认业务扩张有积极一面，但保留对现金流的关注"},
-   {v:"hold",t:"维持原有判断",d:"目前的信息还不足以改变之前的看法"}
-  ])}</div>
-  <button class="btn" id="next" disabled>提交更新后的判断</button>
- </div>`);
- let v="";
- single("action",x=>{v=x;document.getElementById("next").disabled=false});
- btn("next",()=>{
-  S.answers.action=v;
-  // 这项评分主要反映是否能保留不确定性、要求证据或适度更新，而不是是否看空
-  S.scores.adjustment={verify:25,cautious:21,update:23,hold:12}[v];
-  event("judgment_update",v);
-  reasonStage();
- });
-}
-function reasonStage(){
- page(`
- <div class="panel">
-  <div class="eyebrow">INVESTIGATOR'S NOTE</div>
-    <h2>写下你最主要的判断依据</h2>
-  <p>请选择最能解释你刚才行动方案的一项。这里不要求你选择“标准答案”，我们想了解你关注的重点。</p>
-  <div id="reason">${options([
-   {v:"cash",t:"现金流和应收账款之间的关系",d:"我想知道企业是否能及时收回经营现金"},
-   {v:"delivery",t:"设备测试和项目交付进度",d:"订单能否按计划转化为实际交付"},
-   {v:"source",t:"信息来源是否可靠、披露是否完整",d:"企业解释还需要其他材料交叉验证"},
-   {v:"balance",t:"积极信号与风险信号需要同时考虑",d:"不能只依据单一指标形成结论"},
-   {v:"sentiment",t:"市场情绪和其他投资者的看法",d:"我会参考外部市场反馈"}
-  ])}</div>
-  <button class="btn" id="next" disabled>确认调查记录</button>
- </div>`);
- let v="";
- single("reason",x=>{v=x;document.getElementById("next").disabled=false});
- btn("next",()=>{
-  S.answers.reason=v;event("decision_reason",v);
-  aiStage();
- });
-}
-const aiChoices=[
- {v:"source",t:"检查报告引用的原始资料和出处",good:true},
- {v:"date",t:"检查财务数据的发布日期和统计期间",good:true},
- {v:"cash",t:"结合最新现金流和应收账款信息",good:true},
- {v:"headline",t:"直接采用报告标题中的乐观结论",good:false},
- {v:"popularity",t:"根据报告在社交平台的转发量判断可靠性",good:false},
- {v:"prompt",t:"让AI再写一份结论相反的报告，然后任选一份相信",good:false}
-];
-function aiStage(){
- bar(81,"最终挑战 · AI报告");
- page(`
- <div class="panel">
-  <div class="eyebrow">FINAL STAGE / AI REPORT DECODE</div>
-  <h2>最终挑战：AI报告里的陷阱</h2>
-  <p>另一家新能源企业宣布获得大额采购订单。AI报告认为企业前景良好，但你发现报告部分财务数据来自两年前，近期经营现金流也有所下降。</p>
-  <div class="resultcard">
-   <span class="tag">AI摘要节选</span>
-   <p class="bigquote">“企业订单规模扩大，行业前景广阔，预计未来盈利能力将持续提升。”</p>
-   <p class="muted">报告未提供完整的数据更新时间与预测依据。</p>
-  </div>
-  <p>你有三次进一步调查机会。请选择三项行动。</p>
-  <p class="counter">已选 <b id="aiCount">0</b> / 3</p>
-  <div id="ai">${options(aiChoices)}</div>
-  <button class="btn" id="next" disabled>提交最终方案</button>
- </div>`);
- let selected=[];
- multi("ai",3,v=>{
-  selected=v;document.getElementById("aiCount").textContent=v.length;
-  document.getElementById("next").disabled=v.length!==3;
- });
- btn("next",()=>{
-  S.answers.ai_checks=selected;
-  const score=selected.reduce((sum,v)=>{
-   const x=aiChoices.find(a=>a.v===v);
-   return sum+(x.good?20:0);
-  },0);
-  S.scores.ai=score;
-  event("ai_checks",{selected,score});
-  lessonStage();
- });
-}
-function lessonStage(){
- bar(92,"调查员培训");
- page(`
- <div class="panel">
-  <div class="eyebrow">FIELD NOTES / TAKEAWAYS</div>
-  <h2>调查员培训：四条实用原则</h2>
-  <div class="resultcard"><h3>01 事实不等于结论</h3><p>订单增长是信息，未来业绩爆发是预测。要区分已发生的事实和对未来的推断。</p></div>
-  <div class="resultcard"><h3>02 增长不等于质量</h3><p>收入和利润增长值得关注，但现金流、应收账款、毛利率能帮助判断增长是否有质量。</p></div>
-  <div class="resultcard"><h3>03 风险不等于失败</h3><p>现金流下降可能来自回款变慢，也可能与扩张和结算周期有关。需要继续找证据，不能只凭一个数字下结论。</p></div>
-  <div class="resultcard"><h3>04 AI可以协助，但不能替你核查</h3><p>关注AI数据的来源、日期、口径和推理过程。AI给出的结论需要独立验证。</p></div>
-  <div class="notice green">理性参与不是一味谨慎，也不是盲目乐观，而是基于证据形成判断，并在新信息出现时及时更新。</div>
-  <button class="btn" id="finish">生成我的调查员档案 →</button>
- </div>`);
- btn("finish",finish);
-}
-function profileText(){
- const s=S.dimension_scores || S.scores;
- const best=Object.entries(s).sort((a,b)=>b[1]-a[1])[0][0];
- const weak=Object.entries(s).sort((a,b)=>a[1]-b[1])[0][0];
- const names={information:"信息辨别",financial:"财务分析",adjustment:"判断调整",ai:"AI核查"};
- const bestText={
-  information:"你比较擅长辨别材料的来源和性质。面对不同渠道的信息，你会留意它们是否有原始依据，而不是只看表达是否有说服力。",
-  financial:"你能够把注意力放在企业经营质量上，不会只看收入或利润的增长。进一步结合现金流、应收账款和毛利率，有助于你形成更完整的企业判断。",
-  adjustment:"你愿意根据新信息重新审视之前的判断。面对不确定情境，你没有简单地把最初的看法当成最终答案。",
-  ai:"你对智能工具保持了一定的核查意识。你知道AI报告可能存在数据过期、引用不完整或推断过度的问题。"
- };
- const weakText={
-  information:"你可能较容易受到信息表达方式或来源表面权威性的影响。下一次可以先问自己：这条信息来自谁？什么时候发布？有没有原始材料？",
-  financial:"你还可以加强多指标综合分析。收入和利润只是企业经营的一部分，现金流、应收账款和毛利率能提供不同角度的线索。",
-  adjustment:"面对新证据时，你可以进一步区分“改变判断”和“完全推翻判断”。更成熟的做法往往是保留不确定性，并明确下一步需要什么证据。",
-  ai:"你还可以加强对AI输出的验证。不要只看报告结论，要检查数据日期、原始来源和推理过程，也不要把AI生成的内容当作独立证据。"
- };
- return {best,weak,bestText,weakText,names};
-}
-function finish(){
- S.ended=new Date().toISOString();
- S.duration_seconds=Math.round((new Date(S.ended)-new Date(S.started))/1000);
- S.total=Object.values(S.scores).reduce((a,b)=>a+b,0);
- S.total=Math.max(0,Math.min(100,S.total));
- S.interpretation=S.total>=85?"证据推理表现较成熟":S.total>=70?"已具备一定的调查判断基础":S.total>=55?"部分判断环节仍需加强":"建议继续练习信息核查与综合分析";
- const key="FI_CASE_"+S.id;
- event("case_completed",{total:S.total});
- // 结束事件记录完毕后保存完整数据
- localStorage.setItem(key,JSON.stringify(S));
- report();
-}
-function report(){
- bar(100,"案件结案 · 调查报告");
- // 四个维度统一按最终报告权重计分：25 + 30 + 25 + 20 = 100。
- // 财务题为二选题，当前评分权重最高组合为30分；AI题原始最高60分，折算为20分。
- const normalized={
-  information:Math.max(0,Math.min(25,S.scores.information || 0)),
-  financial:Math.max(0,Math.min(30,S.scores.financial || 0)),
-  adjustment:Math.max(0,Math.min(25,S.scores.adjustment || 0)),
-  ai:Math.round(Math.max(0,Math.min(60,S.scores.ai || 0))/60*20)
- };
- S.dimension_scores=normalized;
- const p=profileText();
- // 综合分使用归一化分项，满分100
- S.total=normalized.information+normalized.financial+normalized.adjustment+normalized.ai;
- S.interpretation=S.total>=85?"证据推理表现较成熟":S.total>=70?"已具备一定的调查判断基础":S.total>=55?"部分判断环节仍需加强":"建议继续练习信息核查与综合分析";
- localStorage.setItem("FI_CASE_"+S.id,JSON.stringify(S));
- const maxScore=100;
- const scoreHtml=[
-  ["信息辨别",normalized.information,25],
-  ["财务分析",normalized.financial,30],
-  ["判断调整",normalized.adjustment,25],
-  ["AI核查",normalized.ai,20]
- ].map(([n,v,m])=>`
- <div class="scoreitem"><div class="scoretop"><b>${n}</b><span>${v} / ${m}</span></div>
- <div class="track"><span style="width:${v/m*100}%"></span></div></div>`).join("");
- const actionText={
-  verify:"你倾向于继续寻找原始证据。你的行动重点是把不确定的信息变成可以核查的问题。",
-  cautious:"你选择暂时保留谨慎态度。这可以避免过早下结论，但还可以进一步明确：下一步具体要核查什么？",
-  update:"你愿意同时接纳积极信息和风险信号。关键是继续验证企业解释是否有数据支持。",
-  hold:"你选择暂时维持原判断。面对新信息时，可以进一步判断它是否足以改变原有证据链。"
- };
- const sourceText={
-  announcement:"你优先关注企业公告中的协议条款。这有助于区分框架意向与实际订单，但还需要继续追踪客户验收和交付情况。",
-  customer:"你优先追查客户验收和交付信息。这有助于验证项目进展，但也要注意信息是否来自可核实的原始渠道。",
-  media:"你优先了解市场观点。这可以帮助理解市场预期，但市场关注度本身不能证明企业经营质量。",
-  ai:"你希望借助AI补充分析。工具可以提高信息整理效率，但在已有数据过期的情况下，重新生成报告不一定能解决证据不足的问题。"
- };
- const financialText={
-  high:"你选出的指标能够覆盖经营现金、应收款项或盈利空间等不同方面，体现出一定的综合分析意识。",
-  middle:"你注意到了部分经营线索，但还可以进一步关注收入增长是否真正转化为现金，以及应收账款增长的原因。",
-  low:"你可能较多关注增长指标。下次可以把利润、现金流和应收账款放在一起看，寻找它们之间是否存在不一致。"
- };
- const finLevel=normalized.financial>=22?"high":normalized.financial>=14?"middle":"low";
- const aiGood=S.answers.ai_checks.filter(v=>aiChoices.find(x=>x.v===v).good).length;
- const aiBad=3-aiGood;
- const aiNarrative=aiGood===3?
- "你同时关注了原始来源、数据日期和企业近期经营情况，能够从多个角度检查AI报告。":
- aiGood===2?
- "你已经识别出部分重要核查事项，但仍有一个关键角度容易遗漏。":
- aiGood===1?
- "你注意到了少数核查问题，但仍可能被报告结论或表面热度带着走。":
- "你本次较多依赖报告本身的表达。AI内容需要回到原始资料验证，不能因为它写得完整就默认可靠。";
- const resultProfile=
-  normalized.information>=19&&normalized.financial>=21?"证据搜寻型调查员":
-  normalized.financial>=21?"经营分析型调查员":
-  normalized.adjustment>=19?"动态判断型调查员":
-  normalized.ai>=15?"智能核查型调查员":
-  normalized.information>=17?"信息审查型调查员":
-  "成长中的调查员";
- S.result_profile=resultProfile;
- page(`
- <div class="panel">
-  <div class="eyebrow">CONFIDENTIAL / INVESTIGATION REPORT</div>
-  <div class="panelhead"><h2>你的调查员档案</h2><span class="tag">CASE CLOSED</span></div>
-  <div class="scorecircle" style="--angle:${S.total*3.6}deg">
-   <div><strong>${S.total}</strong><span>综合表现 / 100</span></div>
-  </div>
-  <div style="text-align:center">
-   <div class="muted">本次调查画像</div>
-   <div class="resulttitle">${resultProfile}</div>
-   <p class="muted">${S.interpretation}</p>
-  </div>
-  <div class="notice">这是一份根据本次游戏行为生成的探索性反馈，不是经过标准化验证的心理测验，也不代表现实投资能力或收益水平。</div>
-  <hr>
-  <h3>一、能力雷达档案</h3>
-  ${scoreHtml}
-  <div class="resultsection">
-   <h3>二、你的调查优势</h3>
-   <p>${p.bestText[p.best]}</p>
-   <p class="muted">本次相对突出维度：${p.names[p.best]}</p>
-  </div>
-  <div class="resultsection">
-   <h3>三、下一步值得加强的地方</h3>
-   <p>${p.weakText[p.weak]}</p>
-   <p class="muted">本次相对薄弱维度：${p.names[p.weak]}</p>
-  </div>
-  <div class="resultsection">
-   <h3>四、你的关键选择说明</h3>
-   <p><b>优先核查：</b>${sourceText[S.answers.source_priority]}</p>
-   <p><b>财务线索：</b>${financialText[finLevel]}</p>
-   <p><b>突发事件：</b>${actionText[S.answers.action]}</p>
-   <p><b>AI报告：</b>${aiNarrative}</p>
-  </div>
-  <div class="resultcard">
-   <h3>给你的下一次调查建议</h3>
-   <p>${p.weak==="financial"?"遇到企业利润增长时，别急着形成结论。先查看经营现金流、应收账款和毛利率，弄清利润是否真正转化为现金。":
-   p.weak==="information"?"面对一条吸引人的市场消息，先找原始公告、确认发布时间，再判断其中哪些是事实、哪些只是预测。":
-   p.weak==="adjustment"?"新证据出现时，不必立刻推翻原判断。可以先写下原先依据，再比较新信息是否改变了证据链。":
-   "使用AI分析时，先检查它引用了什么数据、数据有多新，再决定是否采纳它的解释。"}
-   </p>
-  </div>
-  <div class="resultsection">
-   <h3>五、本次调查记录</h3>
-   <p class="muted">调查编号：${S.id}<br>体验时长：${S.duration_seconds}秒<br>查看线索：${opened.length}份<br>查看财务指标：${(S.answers.metrics_viewed||[]).length}项</p>
-  </div>
-  <div class="notice gold">研究说明：分数用于描述参与者在本次情境任务中的表现。它不能直接说明参与者现实中是否应该投资，也不能替代专业投资适当性评估。</div>
-  <div id="cloudStatus" class="notice gold">本机记录已保存｜准备检查云端连接</div>
-  <button class="btn secondary hidden" id="retryUpload">重试云端同步</button>
-  <button class="btn" id="download">导出完整调查数据 JSON</button>
-  <button class="btn secondary" id="again">重新体验</button>
- </div>`);
- btn("download",download);
- btn("again",()=>location.reload());
- btn("retryUpload",syncToCloud);
- syncToCloud();
-}
-function download(){
- const blob=new Blob([JSON.stringify(S,null,2)],{type:"application/json;charset=utf-8"});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;a.download="金融推理局_"+S.id+".json";
- document.body.appendChild(a);a.click();a.remove();
- URL.revokeObjectURL(url);
-}
-start();
-</script>
+<nav class="mobile-nav">
+  <a href="#home"><span>⌂</span>首页</a>
+  <a href="#modules"><span>▦</span>模块</a>
+  <a href="investment-style-test.html"><span>◈</span>风格测试</a>
+  <a href="financial-reasoning.html"><span>⌕</span>推理局</a>
+</nav>
 </body>
 </html>
