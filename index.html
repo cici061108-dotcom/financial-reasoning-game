@@ -378,17 +378,17 @@ footer{
     <div class="breadcrumb">学习中心　/　<strong>平台首页</strong></div>
     <div class="top-right">
       <span class="tag">大学生智能化投资学习平台</span>
-      <a href="auth.html" style="
-  color:#438BEF;
-  font-size:13px;
-  font-weight:700;
-  padding:9px 14px;
-  background:#EAF3FF;
-  border-radius:10px;
-">
-  登录 / 注册
-</a>
-      <div class="avatar">知</div>
+      <div id="authArea" style="display:flex;align-items:center;gap:10px;">
+        <a href="auth.html" style="
+          color:#438BEF;
+          font-size:13px;
+          font-weight:700;
+          padding:9px 14px;
+          background:#EAF3FF;
+          border-radius:10px;
+          text-decoration:none;
+        ">登录 / 注册</a>
+      </div>
     </div>
   </div>
 
@@ -549,5 +549,100 @@ footer{
   <a href="investment-style-test.html"><span>◈</span>风格测试</a>
   <a href="financial-reasoning.html"><span>⌕</span>推理局</a>
 </nav>
+
+<!-- Supabase 登录状态识别 -->
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://izofdngfczaxlqmnmfal.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_zR4Na1A9PjvS8DjbJzDLag_t8FXCiH-";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const authArea = document.getElementById("authArea");
+
+  function renderAuth(session) {
+    if (!authArea) return;
+
+    if (!session || !session.user) {
+      authArea.innerHTML = `
+        <a href="auth.html" style="
+          color:#438BEF;
+          font-size:13px;
+          font-weight:700;
+          padding:9px 14px;
+          background:#EAF3FF;
+          border-radius:10px;
+          text-decoration:none;
+        ">登录 / 注册</a>
+      `;
+      return;
+    }
+
+    const email = session.user.email || "已登录用户";
+    const safeEmail = email.replace(/[&<>"']/g, char => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    })[char]);
+
+    authArea.innerHTML = `
+      <span title="${safeEmail}" style="
+        max-width:190px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        color:#438BEF;
+        font-size:12px;
+        font-weight:700;
+        padding:9px 12px;
+        background:#EAF3FF;
+        border-radius:10px;
+      ">${safeEmail}</span>
+      <button id="logoutButton" type="button" style="
+        border:0;
+        cursor:pointer;
+        color:#A85C49;
+        font-size:12px;
+        font-weight:700;
+        padding:9px 12px;
+        background:#FFF0E9;
+        border-radius:10px;
+      ">退出登录</button>
+    `;
+
+    document.getElementById("logoutButton")?.addEventListener("click", async () => {
+      const button = document.getElementById("logoutButton");
+      if (button) {
+        button.disabled = true;
+        button.textContent = "退出中…";
+      }
+
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        alert("退出登录失败：" + error.message);
+        if (button) {
+          button.disabled = false;
+          button.textContent = "退出登录";
+        }
+      }
+    });
+  }
+
+  const { data: { session }, error } = await supabase.auth.getSession();
+
+  if (error) {
+    console.error("读取登录状态失败：", error.message);
+  }
+
+  renderAuth(session);
+
+  supabase.auth.onAuthStateChange((_event, session) => {
+    renderAuth(session);
+  });
+</script>
+
 </body>
 </html>
