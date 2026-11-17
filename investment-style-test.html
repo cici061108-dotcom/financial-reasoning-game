@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -99,9 +100,45 @@ h1 { font-size:clamp(26px,6vw,38px);line-height:1.25;margin:12px 0; }
   .opt .label { font-size:10px; }
   .opt .desc { font-size:9px; }
 }
+
+/* 返回知投实验室按钮 */
+.home-back {
+  position:fixed;
+  top:18px;
+  left:18px;
+  z-index:99999;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:11px 17px;
+  background:#438BEF;
+  color:#fff;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:700;
+  border-radius:12px;
+  box-shadow:0 4px 14px rgba(67,139,239,.25);
+  transition:transform .2s,background .2s;
+}
+.home-back:hover {
+  background:#2875df;
+  transform:translateY(-2px);
+}
+@media(max-width:520px) {
+  .home-back {
+    top:10px;
+    left:10px;
+    padding:9px 12px;
+    font-size:12px;
+  }
+}
 </style>
 </head>
 <body>
+
+<!-- 返回知投实验室主首页 -->
+<a href="index.html" class="home-back">← 返回知投实验室</a>
+
 <div class="wrap">
 
 <header class="hero">
@@ -387,7 +424,6 @@ function val(item){
   return item.rev?6-value:value;
 }
 function mean(items){return items.reduce((sum,item)=>sum+val(item),0)/items.length;}
-
 
 function renderCharacterCards(p,s1,s2){
   const descriptions={
