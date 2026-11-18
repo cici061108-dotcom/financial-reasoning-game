@@ -1,0 +1,432 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知投实验室｜模拟市场</title>
+<style>
+:root{
+  --navy:#17365d;
+  --blue:#2878d0;
+  --blue-light:#eaf3ff;
+  --green:#159b75;
+  --green-light:#e7f7f1;
+  --orange:#ed9438;
+  --orange-light:#fff3e5;
+  --purple:#8764d8;
+  --purple-light:#f1edff;
+  --red:#e15c62;
+  --red-light:#fff0f0;
+  --bg:#f4f6fa;
+  --card:#ffffff;
+  --text:#25334a;
+  --muted:#8490a3;
+  --line:#e9edf3;
+  --shadow:0 5px 20px rgba(31,55,85,.055);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",
+  "Microsoft YaHei",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+button{font:inherit;cursor:pointer}
+.hidden{display:none!important}
+.topbar{
+  height:66px;background:#fff;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5%;position:sticky;top:0;z-index:20;
+}
+.brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--navy)}
+.brand-icon{
+  width:38px;height:38px;border-radius:12px;background:var(--navy);
+  color:#fff;display:grid;place-items:center;font-size:20px;
+}
+.brand small{display:block;font-size:10px;color:var(--muted);font-weight:500}
+.top-right{font-size:13px;color:var(--muted)}
+.container{max-width:1180px;margin:auto;padding:30px 22px 90px}
+.page{display:none}
+.page.active{display:block}
+.eyebrow{
+  font-size:12px;font-weight:800;color:var(--blue);
+  letter-spacing:2px;margin-bottom:14px;
+}
+.hero{
+  background:linear-gradient(120deg,#17365d,#2869a8);
+  border-radius:25px;color:white;padding:48px;
+  display:grid;grid-template-columns:1.25fr .75fr;gap:30px;
+  align-items:center;overflow:hidden;position:relative;
+}
+.hero:after{
+  content:"";position:absolute;width:360px;height:360px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);right:-100px;top:-150px;
+  box-shadow:0 0 0 35px rgba(255,255,255,.035),
+  0 0 0 75px rgba(255,255,255,.025);
+}
+.hero h1{font-size:42px;line-height:1.2;margin:0 0 16px}
+.hero p{color:#d6e5f5;line-height:1.9;font-size:14px;max-width:550px}
+.hero-tag{
+  display:inline-block;padding:7px 12px;border-radius:20px;
+  background:rgba(255,255,255,.13);font-size:12px;margin-bottom:18px;
+}
+.hero-visual{position:relative;z-index:1;text-align:center}
+.hero-visual .big-number{font-size:43px;font-weight:800;letter-spacing:-1px}
+.hero-visual .label{font-size:12px;color:#cbdcf0;margin-top:8px}
+.hero-visual .visual-card{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  border-radius:18px;padding:25px 12px;margin-top:15px;
+}
+.primary-btn{
+  border:0;border-radius:12px;background:#fff;color:var(--navy);
+  padding:14px 25px;font-weight:800;margin-top:15px;
+  transition:.2s;
+}
+.primary-btn:hover{transform:translateY(-2px);box-shadow:0 7px 18px #102b4a55}
+.section-title{font-size:19px;font-weight:800;margin:34px 0 17px}
+.intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.intro-card,.card{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:17px;padding:21px;box-shadow:var(--shadow);
+}
+.intro-icon{
+  width:43px;height:43px;border-radius:13px;display:grid;
+  place-items:center;font-size:21px;margin-bottom:14px;
+}
+.intro-card h3{font-size:15px;margin:0 0 9px}
+.intro-card p{font-size:12px;color:var(--muted);line-height:1.8;margin:0}
+.rules{
+  background:#fff;border:1px solid var(--line);border-radius:17px;
+  padding:23px;line-height:2;font-size:13px;color:#657187;
+}
+.notice{
+  background:var(--orange-light);color:#9c6728;border-radius:12px;
+  padding:13px 16px;font-size:12px;line-height:1.8;margin-top:18px;
+}
+.start-bottom{text-align:center;padding:28px 0}
+.start-bottom button{
+  border:0;background:var(--navy);color:#fff;padding:15px 38px;
+  border-radius:12px;font-weight:800;
+}
+.dash-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;margin-bottom:22px;
+}
+.dash-head h1{font-size:25px;margin:0 0 7px}
+.dash-head p{margin:0;color:var(--muted);font-size:12px}
+.day-pill{
+  padding:9px 15px;border-radius:30px;background:var(--blue-light);
+  color:var(--blue);font-size:12px;font-weight:800;white-space:nowrap;
+}
+.asset-overview{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+}
+.metric{background:#fff;border:1px solid var(--line);border-radius:16px;padding:19px}
+.metric-label{font-size:12px;color:var(--muted)}
+.metric-value{font-size:23px;font-weight:800;margin:10px 0 6px;color:var(--navy)}
+.metric-note{font-size:11px;color:var(--muted)}
+.market-title{
+  display:flex;justify-content:space-between;align-items:center;
+  margin:30px 0 14px;
+}
+.market-title h2{font-size:17px;margin:0}
+.market-title span{font-size:11px;color:var(--muted)}
+.asset-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.asset{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;
+}
+.asset-top{display:flex;justify-content:space-between;align-items:center}
+.asset-code{font-size:11px;color:var(--muted)}
+.asset-name{font-size:14px;font-weight:800;margin:12px 0}
+.asset-price{font-size:21px;font-weight:800}
+.asset-change{font-size:11px;margin-top:7px;color:var(--muted)}
+.asset-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px}
+.main-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:17px;margin-top:20px}
+.card-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}
+.card-heading h3{font-size:15px;margin:0}
+.card-heading span{font-size:11px;color:var(--muted)}
+.info-item{
+  padding:13px 0;border-bottom:1px solid var(--line);
+  display:flex;gap:12px;align-items:flex-start;
+}
+.info-item:last-child{border:0}
+.info-icon{
+  width:34px;height:34px;border-radius:10px;display:grid;
+  place-items:center;flex-shrink:0;font-size:15px;
+}
+.info-item b{font-size:12px}
+.info-item p{font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.7}
+.trade-placeholder{
+  border:1px dashed #cbd5e2;border-radius:13px;text-align:center;
+  padding:23px 12px;color:var(--muted);font-size:12px;line-height:2;
+}
+.trade-placeholder strong{display:block;color:var(--navy);font-size:14px}
+.progress-track{height:8px;background:#edf0f5;border-radius:20px;overflow:hidden;margin:13px 0}
+.progress-fill{height:100%;width:20%;background:var(--green);border-radius:20px}
+.task{
+  display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);
+  font-size:12px;align-items:center;
+}
+.task:last-child{border:0}
+.task-icon{
+  width:27px;height:27px;border-radius:9px;background:var(--green-light);
+  color:var(--green);display:grid;place-items:center;
+}
+.footer-note{text-align:center;color:#a0a9b7;font-size:10px;margin-top:35px}
+.bottom-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;height:65px;
+  background:#fff;border-top:1px solid var(--line);z-index:30;
+  justify-content:space-around;align-items:center;
+}
+.nav-item{
+  border:0;background:none;color:#929dad;font-size:10px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.nav-item span{font-size:19px}
+.nav-item.active{color:var(--blue);font-weight:800}
+@media(max-width:800px){
+  .hero{grid-template-columns:1fr;padding:30px 24px}
+  .hero h1{font-size:33px}
+  .hero-visual{display:none}
+  .asset-overview{grid-template-columns:repeat(2,1fr)}
+  .asset-grid{grid-template-columns:repeat(2,1fr)}
+  .main-grid{grid-template-columns:1fr}
+  .intro-grid{grid-template-columns:1fr}
+  .topbar{padding:0 17px;height:58px}
+  .container{padding:20px 14px 90px}
+  .bottom-nav{display:flex}
+  .top-right{font-size:11px}
+  .metric{padding:15px}
+  .metric-value{font-size:20px}
+}
+@media(max-width:390px){
+  .hero h1{font-size:29px}
+  .asset{padding:13px}
+  .asset-price{font-size:19px}
+  .dash-head h1{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">知</div>
+    <div>知投实验室<small>MARKET SIMULATION</small></div>
+  </div>
+  <div class="top-right">模拟市场 · 虚拟经营环境</div>
+</header>
+
+<main class="container">
+
+<!-- 首页 -->
+<section id="homePage" class="page active">
+  <div class="eyebrow">MARKET SIMULATION · 01</div>
+  <div class="hero">
+    <div>
+      <div class="hero-tag">✦ 五日模拟投资经营实验</div>
+      <h1>如果给你十万元，<br>你会如何管理它？</h1>
+      <p>
+        你将成为一家模拟投资机构的投资决策负责人。
+        在连续五个交易日中，面对市场波动、企业公告与AI分析，
+        自主决定买入、卖出、持有，或者保留现金。
+      </p>
+      <button class="primary-btn" onclick="startGame()">开始经营 →</button>
+    </div>
+    <div class="hero-visual">
+      <div class="visual-card">
+        <div class="label">INITIAL CAPITAL</div>
+        <div class="big-number">¥100,000</div>
+        <div class="label">初始虚拟经营资金</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">你的五日经营任务</div>
+  <div class="intro-grid">
+    <div class="intro-card">
+      <div class="intro-icon" style="background:var(--blue-light);color:var(--blue)">◈</div>
+      <h3>管理你的投资组合</h3>
+      <p>配置四类模拟资产，观察不同资产在市场变化中的表现，合理管理现金与持仓。</p>
+    </div>
+    <div class="intro-card">
+      <div class="intro-icon" style="background:var(--orange-light);color:var(--orange)">▤</div>
+      <h3>阅读市场信息</h3>
+      <p>关注市场新闻、企业公告、财务数据和AI分析，尝试从不同信息来源形成判断。</p>
+    </div>
+    <div class="intro-card">
+      <div class="intro-icon" style="background:var(--purple-light);color:var(--purple)">✧</div>
+      <h3>复盘你的决策</h3>
+      <p>五日结束后查看资产变化、交易行为、信息使用情况和投资组合表现。</p>
+    </div>
+  </div>
+
+  <div class="section-title">经营规则</div>
+  <div class="rules">
+    <b>01 · 初始资金：</b>每位参与者获得100,000元虚拟资金。<br>
+    <b>02 · 经营周期：</b>连续五个模拟交易日，不可随意回退修改已完成的决策。<br>
+    <b>03 · 资产类型：</b>宽基指数基金、成长型企业、科技创新企业、固定收益类资产。<br>
+    <b>04 · 决策方式：</b>自主选择买入、卖出、持有或保留现金。<br>
+    <b>05 · 风险约束：</b>不得卖空，不得使用超过账户现金的资金买入。<br>
+    <b>06 · 经营目标：</b>不仅关注收益，也关注风险控制、信息核查与决策过程。
+  </div>
+  <div class="notice">
+    ⚠ 本平台全部市场行情、企业信息和事件均为模拟情境，不对应真实新闻或真实企业，不构成任何投资建议。
+  </div>
+  <div class="start-bottom">
+    <button onclick="startGame()">进入模拟市场 →</button>
+  </div>
+</section>
+
+<!-- 经营大厅 -->
+<section id="marketPage" class="page">
+  <div class="dash-head">
+    <div>
+      <h1>投资经营大厅</h1>
+      <p>欢迎回来，投资决策负责人。开始管理你的投资组合吧。</p>
+    </div>
+    <div class="day-pill">● 第 1 / 5 个交易日</div>
+  </div>
+
+  <div class="asset-overview">
+    <div class="metric">
+      <div class="metric-label">账户总资产</div>
+      <div class="metric-value">¥100,000</div>
+      <div class="metric-note">初始账户价值</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">可用现金</div>
+      <div class="metric-value">¥100,000</div>
+      <div class="metric-note">可用于模拟交易</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">持仓市值</div>
+      <div class="metric-value">¥0</div>
+      <div class="metric-note">当前尚未建立持仓</div>
+    </div>
+    <div class="metric">
+      <div class="metric-label">累计收益</div>
+      <div class="metric-value" style="color:var(--muted)">¥0.00</div>
+      <div class="metric-note">收益率 0.00%</div>
+    </div>
+  </div>
+
+  <div class="market-title">
+    <h2>今日资产行情</h2>
+    <span>模拟价格 · 第 1 日</span>
+  </div>
+  <div class="asset-grid">
+    <div class="asset">
+      <div class="asset-top"><span class="asset-code">ASSET A</span><span class="asset-dot" style="background:var(--blue)"></span></div>
+      <div class="asset-name">宽基指数基金</div>
+      <div class="asset-price">10.00</div>
+      <div class="asset-change">初始价格 · 元/份</div>
+    </div>
+    <div class="asset">
+      <div class="asset-top"><span class="asset-code">ASSET B</span><span class="asset-dot" style="background:var(--orange)"></span></div>
+      <div class="asset-name">成长型企业</div>
+      <div class="asset-price">10.00</div>
+      <div class="asset-change">初始价格 · 元/份</div>
+    </div>
+    <div class="asset">
+      <div class="asset-top"><span class="asset-code">ASSET C</span><span class="asset-dot" style="background:var(--purple)"></span></div>
+      <div class="asset-name">科技创新企业</div>
+      <div class="asset-price">10.00</div>
+      <div class="asset-change">初始价格 · 元/份</div>
+    </div>
+    <div class="asset">
+      <div class="asset-top"><span class="asset-code">ASSET D</span><span class="asset-dot" style="background:var(--green)"></span></div>
+      <div class="asset-name">固定收益类</div>
+      <div class="asset-price">10.00</div>
+      <div class="asset-change">初始价格 · 元/份</div>
+    </div>
+  </div>
+
+  <div class="main-grid">
+    <div>
+      <div class="card">
+        <div class="card-heading">
+          <h3>市场情报中心</h3><span>今日信息</span>
+        </div>
+        <div class="info-item">
+          <div class="info-icon" style="background:var(--blue-light);color:var(--blue)">▤</div>
+          <div><b>市场开盘简报</b><p>五日模拟市场正式开启。四类资产以10.00元/份的价格开盘。</p></div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon" style="background:var(--orange-light);color:var(--orange)">▣</div>
+          <div><b>企业公告与财务资料</b><p>后续交易日将逐步开放企业公告及相关财务信息。</p></div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon" style="background:var(--purple-light);color:var(--purple)">✧</div>
+          <div><b>AI投资分析</b><p>模拟经营过程中将提供统一的AI分析材料，供你参考与核查。</p></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:17px">
+        <div class="card-heading">
+          <h3>模拟交易中心</h3><span>交易功能将在后续阶段开放</span>
+        </div>
+        <div class="trade-placeholder">
+          <strong>你的投资组合即将开始建立</strong>
+          买入、卖出、持有和保留现金等操作将在交易系统完成后开放。<br>
+          请先熟悉市场信息与四类资产。
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-heading">
+          <h3>五日经营进度</h3><span>20%</span>
+        </div>
+        <div style="font-size:12px;color:var(--muted)">当前进度：第 1 个交易日</div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted)">
+          <span>开始经营</span><span>最终结算</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:17px">
+        <div class="card-heading">
+          <h3>今日经营任务</h3><span>DAY 01</span>
+        </div>
+        <div class="task"><div class="task-icon">1</div><div>了解四类模拟资产</div></div>
+        <div class="task"><div class="task-icon">2</div><div>阅读今日市场简报</div></div>
+        <div class="task"><div class="task-icon">3</div><div>形成初始投资判断</div></div>
+        <div class="task"><div class="task-icon">4</div><div>制定初始资金配置</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    知投实验室 · 模拟市场 | 所有数据仅用于教学与研究实验
+  </div>
+</section>
+</main>
+
+<!-- 手机端导航 -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-item active" onclick="showMarket()"><span>⌂</span>经营大厅</button>
+  <button class="nav-item" onclick="showMarket()"><span>▥</span>资产行情</button>
+  <button class="nav-item" onclick="showMarket()"><span>⇄</span>交易中心</button>
+  <button class="nav-item" onclick="showMarket()"><span>▤</span>市场情报</button>
+  <button class="nav-item" onclick="showMarket()"><span>◷</span>经营进度</button>
+</nav>
+
+<script>
+function startGame(){
+  document.getElementById("homePage").classList.remove("active");
+  document.getElementById("marketPage").classList.add("active");
+  document.getElementById("bottomNav").style.display="flex";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function showMarket(){
+  document.getElementById("homePage").classList.remove("active");
+  document.getElementById("marketPage").classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>
